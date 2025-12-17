@@ -1,5 +1,6 @@
 import { currencyFormatter } from "../util/formatting";
 
+// Component to display individual cart item
 export default function CartItem({
   name,
   quantity,

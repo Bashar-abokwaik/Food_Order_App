@@ -5,14 +5,20 @@ import CartContext from "../store/CartContext";
 import UserProgressContext from "../store/UserProgressContext";
 
 export default function Header() {
+  // Access cart and user progress contexts
   const cartCts = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
+  
+  // Calculate total number of items in cart
   const totalCartItems = cartCts.items.reduce((totalNumberOfItems, item) => {
     return totalNumberOfItems + item.quantity;
   }, 0);
+
+  // Handler to show cart
   function handleShowCart() {
     userProgressCtx.showCart();
   }
+
   return (
     <header id="main-header">
       <div id="title">

@@ -6,26 +6,33 @@ import { currencyFormatter } from "../util/formatting";
 import UserProgressContext from "../store/UserProgressContext";
 import CartItem from "./CartItem";
 
+// Component to display the shopping cart
 export default function Cart() {
+  // Access cart and user progress contexts
   const cartCtx = useContext(CartContext);
-  const userprogressCtx = useContext(UserProgressContext);
+  const userProgressCtx = useContext(UserProgressContext);
 
+  // Calculate total price of items in cart
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
     0
   );
+
+  // Handlers to close cart and go to checkout
   function handleCloseCart() {
-    userprogressCtx.hideCart();
+    userProgressCtx.hideCart();
   }
 
+  // Go to checkout
   function handleGoToCheckout() {
-    userprogressCtx.showCheckout();
+    userProgressCtx.showCheckout();
   }
+
   return (
     <Modal
       className="cart"
-      open={userprogressCtx.progress === "cart"}
-      onClose={userprogressCtx.progress === "cart" ? handleCloseCart : null}
+      open={userProgressCtx.progress === "cart"}
+      onClose={userProgressCtx.progress === "cart" ? handleCloseCart : null}
     >
       <h2>Your Cart</h2>
       <ul>

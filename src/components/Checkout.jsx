@@ -8,6 +8,7 @@ import UserProgressContext from "../store/UserProgressContext";
 import useHttp from "../hooks/useHttp";
 import Error from "./Error";
 
+// Configuration for HTTP request
 const requestConfig = {
   method: "POST",
   headers: {
@@ -15,10 +16,13 @@ const requestConfig = {
   },
 };
 
+// Component to handle checkout process
 export default function Checkout() {
+  // Access cart and user progress contexts
   const cartCtx = useContext(CartContext);
-  const userProgreesCtx = useContext(UserProgressContext);
+  const userProgressCtx = useContext(UserProgressContext);
 
+  // Custom hook for HTTP requests
   const {
     data,
     isLoading: isSending,
@@ -27,26 +31,33 @@ export default function Checkout() {
     clearData,
   } = useHttp("http://localhost:3000/orders", requestConfig);
 
+  // Calculate total price of items in cart
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
     0
   );
+
+  // Handlers to close checkout and finish order
   function handleClose() {
-    userProgreesCtx.hideCheckout();
+    userProgressCtx.hideCheckout();
   }
 
+  // Finish order process
   function handleFinish() {
-    userProgreesCtx.hideCheckout();
+    userProgressCtx.hideCheckout();
     cartCtx.clearCart();
     clearData();
   }
 
+  // Handler to submit order
   function handleSubmit(event) {
     event.preventDefault();
 
+    // Extract customer data from form
     const fd = new FormData(event.target);
     const customerData = Object.fromEntries(fd.entries());
 
+    // Send order data to server
     sendRequest(
       JSON.stringify({
         order: {
@@ -57,6 +68,7 @@ export default function Checkout() {
     );
   }
 
+  // Determine actions to display based on sending state
   let actions = (
     <>
       <Button type="button" textOnly onClick={handleClose}>
@@ -66,14 +78,16 @@ export default function Checkout() {
     </>
   );
 
+  // Display sending message while order is being sent
   if (isSending) {
     actions = <span>Sending order data...</span>;
   }
-
+  
+  // Display success message if order was submitted successfully
   if (data && !error) {
     return (
       <Modal
-        open={userProgreesCtx.progress === "checkout"}
+        open={userProgressCtx.progress === "checkout"}
         onClose={handleFinish}
       >
         <h2>Success!</h2>
@@ -90,7 +104,7 @@ export default function Checkout() {
   }
 
   return (
-    <Modal open={userProgreesCtx.progress === "checkout"} onClose={handleClose}>
+    <Modal open={userProgressCtx.progress === "checkout"} onClose={handleClose}>
       <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount:{currencyFormatter.format(cartTotal)}</p>
@@ -102,7 +116,7 @@ export default function Checkout() {
           <Input label="City" type="text" id="city" />
         </div>
 
-        {error && <Error title="Failed to submit order" massage={error} />}
+        {error && <Error title="Failed to submit order" message={error} />}
 
         <p className="modal-actions">{actions}</p>
       </form>

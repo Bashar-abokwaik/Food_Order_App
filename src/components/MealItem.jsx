@@ -3,11 +3,15 @@ import { currencyFormatter } from "../util/formatting";
 import Button from "./UI/Button";
 import CartContext from "../store/CartContext";
 
+// Component to display individual meal item
 export default function MealItem({ meal }) {
+  // Access cart context
   const cartCtx = useContext(CartContext);
-  function handleAddMealToCart(){
-    cartCtx.addItem(meal)
+  // Handler to add meal to cart
+  function handleAddMealToCart() {
+    cartCtx.addItem(meal);
   }
+  
   return (
     <li className="meal-item">
       <article>
