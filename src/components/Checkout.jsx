@@ -29,7 +29,7 @@ export default function Checkout() {
     error,
     sendRequest,
     clearData,
-  } = useHttp("http://localhost:3000/orders", requestConfig);
+  } = useHttp("https://meals-backend-42v0.onrender.com/orders", requestConfig);
 
   // Calculate total price of items in cart
   const cartTotal = cartCtx.items.reduce(

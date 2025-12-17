@@ -12,7 +12,7 @@ export default function Meals() {
     data: loadedMeals,
     isLoading,
     error,
-  } = useHttp("http://localhost:3000/meals", requestConfig, []); // Initial data is an empty array
+  } = useHttp("https://meals-backend-42v0.onrender.com/meals", requestConfig, []); // Initial data is an empty array
 
   // Display loading message while fetching data
   if (isLoading) {
